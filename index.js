@@ -1,7 +1,8 @@
-import { mergeSort, removeDuplicates } from "./sorting_module.js";
+import { mergeSort, removeDuplicates, prettyPrint } from "./tools_module.js";
 
 let arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-12;
+// let arr = [1, 2, 3, 4, 5, 6, 7];
+
 class Node {
   constructor(data) {
     this.data = data;
@@ -16,7 +17,7 @@ class Tree {
   }
 
   buildTree(arr) {
-    const mid = Math.floor(arr.length / 2);
+    const mid = Math.floor((arr.length - 1) / 2);
 
     let root = arr.length == 0 ? null : new Node(arr[mid]);
 
@@ -33,3 +34,5 @@ let chajara = new Tree(removeDuplicates(mergeSort(arr)));
 
 console.log(removeDuplicates(mergeSort(arr)));
 console.log(chajara.root);
+
+prettyPrint(chajara.root);
