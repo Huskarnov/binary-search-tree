@@ -2,7 +2,7 @@ export { mergeSort, removeDuplicates, prettyPrint };
 
 function mergeSort(array) {
   if (array.length < 1) {
-    return;
+    return [];
   } else if (array.length === 1) {
     return [array[0]];
   }
@@ -34,6 +34,9 @@ function mergeSort(array) {
 }
 
 function removeDuplicates(array) {
+  if (array.length < 1) {
+    return [];
+  }
   let pointer = array[0];
   let cleanArray = [array[0]];
 

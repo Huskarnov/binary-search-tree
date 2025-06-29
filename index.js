@@ -1,6 +1,7 @@
 import { mergeSort, removeDuplicates, prettyPrint } from "./tools_module.js";
 
 let arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+// let arr = [];
 // let arr = [1, 2, 3, 4, 5, 6, 7];
 
 class Node {
@@ -28,11 +29,52 @@ class Tree {
 
     return root;
   }
+
+  insert(value) {
+    let current = this.root;
+
+    if (!current) {
+      return (this.root = new Node(value));
+    }
+
+    if (value == current.data) {
+      alert("value already existing");
+      return;
+    }
+
+    while (current) {
+      if (value == current.data) {
+        alert("value already existing");
+        return;
+      }
+      if (value < current.data) {
+        if (current.left) {
+          current = current.left;
+        } else {
+          current.left = new Node(value);
+          return;
+        }
+      } else {
+        if (current.right) {
+          current = current.right;
+        } else {
+          current.right = new Node(value);
+          return;
+        }
+      }
+    }
+  }
+
+  delete(value) {
+    let current = this.root;
+  }
 }
 
 let chajara = new Tree(removeDuplicates(mergeSort(arr)));
 
 console.log(removeDuplicates(mergeSort(arr)));
-console.log(chajara.root);
 
+chajara.insert(22);
+
+console.log(chajara.root);
 prettyPrint(chajara.root);
