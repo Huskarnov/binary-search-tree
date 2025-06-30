@@ -1,6 +1,7 @@
 import { mergeSort, removeDuplicates, prettyPrint } from "./tools_module.js";
 
 let arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+// let arr = [50, 20, 30, 40, 32, 34, 36, 70, 60, 65, 80, 75, 85];
 // let arr = [];
 // let arr = [1, 2, 3, 4, 5, 6, 7];
 
@@ -65,8 +66,18 @@ class Tree {
     }
   }
 
-  delete(value) {
-    let current = this.root;
+  findNode(node, value) {
+    if (value == node.data) {
+      alert("node found!");
+      return node.data;
+    } else if (value > node.data && node.right) {
+      this.findNode(node.right, value);
+    } else if (value < node.data && node.left) {
+      this.findNode(node.left, value);
+    } else {
+      alert("node NOT found");
+      return;
+    }
   }
 }
 
@@ -78,3 +89,5 @@ chajara.insert(22);
 
 console.log(chajara.root);
 prettyPrint(chajara.root);
+
+console.log(chajara.findNode(chajara.root, 4));
