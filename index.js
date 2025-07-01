@@ -15,7 +15,7 @@ class Node {
 
 class Tree {
   constructor(array) {
-    this.root = this.buildTree(array);
+    this.root = this.buildTree(removeDuplicates(mergeSort(array)));
   }
 
   buildTree(arr) {
@@ -66,28 +66,43 @@ class Tree {
     }
   }
 
-  findNode(node, value) {
+  findNode(value) {
+    return this.findNodeIntra(this.root, value);
+  }
+
+  findNodeIntra(node, value, parent) {
+    let parento = node;
+
     if (value == node.data) {
-      alert("node found!");
-      return node.data;
+      return { node, parent };
     } else if (value > node.data && node.right) {
-      this.findNode(node.right, value);
+      return this.findNodeIntra(node.right, value, parento);
     } else if (value < node.data && node.left) {
-      this.findNode(node.left, value);
+      return this.findNodeIntra(node.left, value, parento);
     } else {
-      alert("node NOT found");
+      // alert("node NOT found");
       return;
+    }
+  }
+
+  delete(value) {
+    let items = this.findNodeIntra(this.root, value);
+
+    if (!items) {
+      return;
+    } else if (!items.node.right && !items.node.left) {
+      items.parent.right = null;
+      items.parent.left = null;
+
+      // return;
     }
   }
 }
 
-let chajara = new Tree(removeDuplicates(mergeSort(arr)));
+let chajara = new Tree(arr);
 
 console.log(removeDuplicates(mergeSort(arr)));
-
-chajara.insert(22);
-
-console.log(chajara.root);
 prettyPrint(chajara.root);
 
-console.log(chajara.findNode(chajara.root, 4));
+console.log(chajara.delete(3));
+prettyPrint(chajara.root);
