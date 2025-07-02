@@ -70,7 +70,7 @@ class Tree {
     return this.findNodeIntra(this.root, value);
   }
 
-  findNodeIntra(node, value, parent) {
+  findNodeIntra(node, value, parent = null) {
     let parento = node;
 
     if (value == node.data) {
@@ -89,12 +89,30 @@ class Tree {
     let items = this.findNodeIntra(this.root, value);
 
     if (!items) {
+      alert(`${value} doesn't exist`);
       return;
+      // --------------------------------------------- no child
     } else if (!items.node.right && !items.node.left) {
-      items.parent.right = null;
-      items.parent.left = null;
-
-      // return;
+      if (items.parent.right.data === value) {
+        items.parent.right = null;
+      } else if (items.parent.left.data === value) {
+        items.parent.left = null;
+      }
+      // --------------------------------------------- left child only
+    } else if (!items.node.right && items.node.left) {
+      if (items.parent.left && items.parent.left.data === value) {
+        items.parent.left = items.node.left;
+      } else {
+        items.parent.right = items.node.left;
+      }
+      // --------------------------------------------- right child only
+    } else if (items.node.right && !items.node.left) {
+      if (items.parent.left && items.parent.left.data === value) {
+        items.parent.left = items.node.right;
+      } else {
+        items.parent.right = items.node.right;
+      }
+      // --------------------------------------------- both right child left child
     }
   }
 }
@@ -102,7 +120,8 @@ class Tree {
 let chajara = new Tree(arr);
 
 console.log(removeDuplicates(mergeSort(arr)));
-prettyPrint(chajara.root);
 
-console.log(chajara.delete(3));
+chajara.insert(2);
+// chajara.delete(9);
+// chajara.delete(324);
 prettyPrint(chajara.root);
