@@ -74,13 +74,15 @@ class Tree {
     let parento = node;
 
     if (value == node.data) {
+      // alert("value FOUND !!");
+
       return { node, parent };
     } else if (value > node.data && node.right) {
       return this.findNodeIntra(node.right, value, parento);
     } else if (value < node.data && node.left) {
       return this.findNodeIntra(node.left, value, parento);
     } else {
-      // alert("node NOT found");
+      // alert("value NOT found");
       return;
     }
   }
@@ -132,15 +134,15 @@ class Tree {
     // ---------------------------------------------
     // --------------------------------------------- both right child left child
     else if (items.node.right && items.node.left) {
-      // --------------------------------------------- right child no child
+      // --------------------------------------------- right child has no child
       if (!items.node.right.left && !items.node.right.right) {
         items.node.data = items.node.right.data;
         items.node.right = null;
-        // --------------------------------------------- child only right child
+        // --------------------------------------------- right child has only right child
       } else if (!items.node.right.left && items.node.right.right) {
         items.node.data = items.node.right.data;
         items.node.right = items.node.right.right;
-        // --------------------------------------------- child has left child or both
+        // --------------------------------------------- right child has left child or both
       } else if (items.node.right.left) {
         const valueToUse3 = items.node.right.left.data;
         this.delete(valueToUse3);
@@ -153,17 +155,5 @@ class Tree {
 let chajara = new Tree(arr);
 
 console.log(removeDuplicates(mergeSort(arr)));
-
-// chajara.delete(8);
-// chajara.delete(9);
-// chajara.delete(23);
-// chajara.delete(67);
-// chajara.delete(324);
-chajara.delete(1);
-chajara.delete(3);
-chajara.delete(4);
-chajara.delete(5);
-chajara.delete(7);
-// chajara.delete(8);
 
 prettyPrint(chajara.root);
