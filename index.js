@@ -34,7 +34,7 @@ class Tree {
   insert(value) {
     let current = this.root;
 
-    if (!current) {
+    if (!current || current.data === null) {
       return (this.root = new Node(value));
     }
 
@@ -93,26 +93,59 @@ class Tree {
       return;
       // --------------------------------------------- no child
     } else if (!items.node.right && !items.node.left) {
-      if (items.parent.right.data === value) {
+      if (!items.parent) {
+        items.node.data = null;
+
+        return;
+      }
+      if (items.parent.data < value) {
         items.parent.right = null;
-      } else if (items.parent.left.data === value) {
+      } else if (items.parent.data > value) {
         items.parent.left = null;
       }
       // --------------------------------------------- left child only
     } else if (!items.node.right && items.node.left) {
-      if (items.parent.left && items.parent.left.data === value) {
+      // if (items.parent.left && items.parent.left.data === value) {
+      if (!items.parent) {
+        this.root = items.node.left;
+        return;
+      }
+      if (items.parent.data > value) {
         items.parent.left = items.node.left;
       } else {
         items.parent.right = items.node.left;
       }
       // --------------------------------------------- right child only
     } else if (items.node.right && !items.node.left) {
-      if (items.parent.left && items.parent.left.data === value) {
-        items.parent.left = items.node.right;
-      } else {
-        items.parent.right = items.node.right;
+      // if (items.parent.left && items.parent.left.data === value) {
+      if (!items.parent) {
+        this.root = items.node.right;
+        return;
       }
-      // --------------------------------------------- both right child left child
+      if (items.parent.data < value) {
+        items.parent.right = items.node.right;
+      } else {
+        items.parent.left = items.node.right;
+      }
+    }
+    // ---------------------------------------------
+    // ---------------------------------------------
+    // --------------------------------------------- both right child left child
+    else if (items.node.right && items.node.left) {
+      // --------------------------------------------- right child no child
+      if (!items.node.right.left && !items.node.right.right) {
+        items.node.data = items.node.right.data;
+        items.node.right = null;
+        // --------------------------------------------- child only right child
+      } else if (!items.node.right.left && items.node.right.right) {
+        items.node.data = items.node.right.data;
+        items.node.right = items.node.right.right;
+        // --------------------------------------------- child has left child or both
+      } else if (items.node.right.left) {
+        const valueToUse3 = items.node.right.left.data;
+        this.delete(valueToUse3);
+        items.node.data = valueToUse3;
+      }
     }
   }
 }
@@ -121,7 +154,16 @@ let chajara = new Tree(arr);
 
 console.log(removeDuplicates(mergeSort(arr)));
 
-chajara.insert(2);
+// chajara.delete(8);
 // chajara.delete(9);
+// chajara.delete(23);
+// chajara.delete(67);
 // chajara.delete(324);
+chajara.delete(1);
+chajara.delete(3);
+chajara.delete(4);
+chajara.delete(5);
+chajara.delete(7);
+// chajara.delete(8);
+
 prettyPrint(chajara.root);
