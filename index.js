@@ -15,17 +15,17 @@ class Node {
 
 class Tree {
   constructor(array) {
-    this.root = this.buildTree(removeDuplicates(mergeSort(array)));
+    this.root = this.#buildTree(removeDuplicates(mergeSort(array)));
   }
 
-  buildTree(arr) {
+  #buildTree(arr) {
     const mid = Math.floor((arr.length - 1) / 2);
 
     let root = arr.length == 0 ? null : new Node(arr[mid]);
 
     if (root) {
-      root.left = this.buildTree(arr.slice(0, mid));
-      root.right = this.buildTree(arr.slice(mid + 1));
+      root.left = this.#buildTree(arr.slice(0, mid));
+      root.right = this.#buildTree(arr.slice(mid + 1));
     }
 
     return root;
@@ -66,11 +66,7 @@ class Tree {
     }
   }
 
-  findNode(value) {
-    return this.findNodeIntra(this.root, value);
-  }
-
-  findNodeIntra(node, value, parent = null) {
+  #findNodeIntra(node, value, parent = null) {
     let parento = node;
 
     if (value == node.data) {
@@ -78,22 +74,26 @@ class Tree {
 
       return { node, parent };
     } else if (value > node.data && node.right) {
-      return this.findNodeIntra(node.right, value, parento);
+      return this.#findNodeIntra(node.right, value, parento);
     } else if (value < node.data && node.left) {
-      return this.findNodeIntra(node.left, value, parento);
+      return this.#findNodeIntra(node.left, value, parento);
     } else {
-      // alert("value NOT found");
+      alert("value NOT found");
       return;
     }
   }
 
+  findNode(value) {
+    return this.#findNodeIntra(this.root, value);
+  }
+
   delete(value) {
-    let items = this.findNodeIntra(this.root, value);
+    let items = this.#findNodeIntra(this.root, value);
 
     if (!items) {
       alert(`${value} doesn't exist`);
       return;
-      // --------------------------------------------- no child
+      // --------------------------------------------- no child (leaf)
     } else if (!items.node.right && !items.node.left) {
       if (!items.parent) {
         items.node.data = null;
@@ -149,6 +149,32 @@ class Tree {
         items.node.data = valueToUse3;
       }
     }
+  }
+
+  levelOrder(callback) {
+    if (!callback) {
+      alert("No Callback provided");
+      return;
+    }
+    let queue = [];
+    let pointer = 0;
+
+    queue.push(this.root);
+
+    while (queue[pointer]) {
+      callback(queue[pointer].data);
+
+      if (queue[pointer].left) {
+        queue.push(queue[pointer].left);
+      }
+      if (queue[pointer].right) {
+        queue.push(queue[pointer].right);
+      }
+      pointer++;
+    }
+  }
+  callback(item) {
+    console.log(item);
   }
 }
 
