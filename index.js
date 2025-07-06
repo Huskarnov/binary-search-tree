@@ -173,6 +173,66 @@ class Tree {
       pointer++;
     }
   }
+  levelOrderRecursive(callback, queue = [], node) {
+    if (typeof callback !== "function") {
+      alert("Callback not provided !!");
+      return;
+    }
+    if (node && queue.length === 0) queue.push(node);
+
+    callback(queue[0]);
+
+    const current = queue[0];
+
+    if (current.left) queue.push(current.left);
+
+    if (current.right) queue.push(current.right);
+
+    queue.shift();
+
+    if (queue.length > 0) this.levelOrderRecursive(callback, queue);
+  }
+
+  inOrder(callback, root) {
+    if (typeof callback !== "function") {
+      alert("No callback provided !!");
+      return;
+    }
+    if (!root) {
+      return;
+    } else {
+      this.inOrder(callback, root.left);
+      callback(root.data);
+      this.inOrder(callback, root.right);
+    }
+  }
+  preOrder(callback, root) {
+    if (typeof callback !== "function") {
+      alert("No callback provided !!");
+      return;
+    }
+    if (!root) {
+      return;
+    } else {
+      callback(root.data);
+      this.preOrder(callback, root.left);
+      this.preOrder(callback, root.right);
+    }
+  }
+  postOrder(callback, root) {
+    if (typeof callback !== "function") {
+      alert("No callback provided !!");
+      return;
+    }
+    if (!root) {
+      return;
+    } else {
+      this.postOrder(callback, root.left);
+      this.postOrder(callback, root.right);
+      callback(root.data);
+    }
+  }
+
   callback(item) {
     console.log(item);
   }
@@ -183,3 +243,5 @@ let chajara = new Tree(arr);
 console.log(removeDuplicates(mergeSort(arr)));
 
 prettyPrint(chajara.root);
+
+chajara.inOrder(chajara.callback, chajara.root);
