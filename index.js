@@ -151,15 +151,16 @@ class Tree {
     }
   }
 
-  levelOrder(callback) {
+  levelOrder(callback, rootNode = this.root) {
     if (!callback) {
       alert("No Callback provided");
       return;
     }
+
     let queue = [];
     let pointer = 0;
 
-    queue.push(this.root);
+    queue.push(rootNode);
 
     while (queue[pointer]) {
       callback(queue[pointer].data);
@@ -172,6 +173,28 @@ class Tree {
       }
       pointer++;
     }
+  }
+
+  levelOrderLastValue(rootNode = this.root) {
+    let lastValue;
+
+    let queue = [];
+    let pointer = 0;
+
+    queue.push(rootNode);
+
+    while (queue[pointer]) {
+      lastValue = queue[pointer];
+
+      if (queue[pointer].left) {
+        queue.push(queue[pointer].left);
+      }
+      if (queue[pointer].right) {
+        queue.push(queue[pointer].right);
+      }
+      pointer++;
+    }
+    return lastValue;
   }
   levelOrderRecursive(callback, queue = [], node) {
     if (typeof callback !== "function") {
@@ -206,6 +229,7 @@ class Tree {
       this.inOrder(callback, root.right);
     }
   }
+
   preOrder(callback, root) {
     if (typeof callback !== "function") {
       alert("No callback provided !!");
@@ -233,8 +257,44 @@ class Tree {
     }
   }
 
+  depth(value) {
+    return this.#depthIntra(this.root, value);
+  }
+
+  #depthIntra(node, value, height = 0) {
+    if (value === node.data) {
+      return height;
+    } else if (value > node.data && node.right) {
+      height++;
+      return this.#depthIntra(node.right, value, height);
+    } else if (value < node.data && node.left) {
+      height++;
+      return this.#depthIntra(node.left, value, height);
+    } else {
+      alert("value NOT found");
+      return null;
+    }
+  }
+
+  height(value) {
+    let furthestNode;
+
+    if (!this.findNode(value)) {
+      return;
+    } else {
+      furthestNode = this.findNode(value).node;
+    }
+    return (
+      this.depth(this.levelOrderLastValue(furthestNode).data) -
+      this.depth(value)
+    );
+  }
+
   callback(item) {
     console.log(item);
+  }
+  callbackLastValue(item) {
+    return item;
   }
 }
 
@@ -244,4 +304,4 @@ console.log(removeDuplicates(mergeSort(arr)));
 
 prettyPrint(chajara.root);
 
-chajara.inOrder(chajara.callback, chajara.root);
+console.log(chajara.height(67));
