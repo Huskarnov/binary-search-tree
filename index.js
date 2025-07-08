@@ -1,8 +1,18 @@
-import { mergeSort, removeDuplicates, prettyPrint } from "./tools_module.js";
+import {
+  mergeSort,
+  removeDuplicates,
+  prettyPrint,
+  randomArray,
+} from "./tools_module.js";
 
-let arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-// let arr = [50, 20, 30, 40, 32, 34, 36, 70, 60, 65, 80, 75, 85];
-// let arr = [];
+// let arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+let arr = randomArray();
+// let arr = [
+//   2, 4, 5, 6, 7, 9, 10, 11, 13, 17, 18, 19, 22, 24, 25, 27, 29, 30, 32, 33, 34,
+//   36, 37, 40, 42, 44, 47, 50, 51, 53, 54, 58, 60, 62, 63, 64, 66, 67, 68, 70,
+//   71, 73, 75, 76, 77, 79, 81, 82, 83, 84, 85, 86, 89, 92, 93, 94, 95, 96, 97,
+//   98, 99,
+// ];
 // let arr = [1, 2, 3, 4, 5, 6, 7];
 
 class Node {
@@ -16,6 +26,7 @@ class Node {
 class Tree {
   constructor(array) {
     this.root = this.#buildTree(removeDuplicates(mergeSort(array)));
+    this.arraySlate = [];
   }
 
   #buildTree(arr) {
@@ -163,7 +174,7 @@ class Tree {
     queue.push(rootNode);
 
     while (queue[pointer]) {
-      callback(queue[pointer].data);
+      callback(queue[pointer]);
 
       if (queue[pointer].left) {
         queue.push(queue[pointer].left);
@@ -216,7 +227,7 @@ class Tree {
     if (queue.length > 0) this.levelOrderRecursive(callback, queue);
   }
 
-  inOrder(callback, root) {
+  inOrder(callback, root = this.root) {
     if (typeof callback !== "function") {
       alert("No callback provided !!");
       return;
@@ -225,12 +236,12 @@ class Tree {
       return;
     } else {
       this.inOrder(callback, root.left);
-      callback(root.data);
+      callback(root);
       this.inOrder(callback, root.right);
     }
   }
 
-  preOrder(callback, root) {
+  preOrder(callback, root = this.root) {
     if (typeof callback !== "function") {
       alert("No callback provided !!");
       return;
@@ -238,12 +249,12 @@ class Tree {
     if (!root) {
       return;
     } else {
-      callback(root.data);
+      callback(root);
       this.preOrder(callback, root.left);
       this.preOrder(callback, root.right);
     }
   }
-  postOrder(callback, root) {
+  postOrder(callback, root = this.root) {
     if (typeof callback !== "function") {
       alert("No callback provided !!");
       return;
@@ -253,7 +264,7 @@ class Tree {
     } else {
       this.postOrder(callback, root.left);
       this.postOrder(callback, root.right);
-      callback(root.data);
+      callback(root);
     }
   }
 
@@ -290,18 +301,55 @@ class Tree {
     );
   }
 
+  isBalanced() {
+    // this.levelOrder(this.callbackFillWorkArray);
+    let heightTemp;
+    this.levelOrder((item) => {
+      this.arraySlate.push(item);
+    });
+
+    for (let i = 0; i < this.arraySlate.length; i++) {
+      if (this.arraySlate[i].right) {
+        heightTemp = this.height(this.arraySlate[i].right.data);
+      }
+      if (this.arraySlate[i].left) {
+        heightTemp = Math.abs(
+          heightTemp - this.height(this.arraySlate[i].left.data)
+        );
+      }
+      if (heightTemp > 1) {
+        alert("Tree NOT balanced !!");
+        this.arraySlate = [];
+        return false;
+      }
+    }
+    alert("Tree balanced");
+    this.arraySlate = [];
+    return true;
+  }
+
+  rebalance() {
+    if (!this.isBalanced()) {
+      this.levelOrder((item) => {
+        this.arraySlate.push(item.data);
+      });
+      this.root = this.#buildTree(removeDuplicates(mergeSort(this.arraySlate)));
+      this.arraySlate = [];
+    }
+  }
+
   callback(item) {
-    console.log(item);
+    console.log(item.data);
   }
-  callbackLastValue(item) {
-    return item;
-  }
+  callbackFillWorkArray = (item) => {
+    this.arraySlate.push(item);
+  };
 }
 
 let chajara = new Tree(arr);
 
-console.log(removeDuplicates(mergeSort(arr)));
+// console.log(removeDuplicates(mergeSort(arr)));
 
 prettyPrint(chajara.root);
-
-console.log(chajara.height(67));
+chajara.isBalanced();
+prettyPrint(chajara.root);

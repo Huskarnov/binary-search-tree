@@ -1,4 +1,4 @@
-export { mergeSort, removeDuplicates, prettyPrint };
+export { mergeSort, removeDuplicates, prettyPrint, randomArray };
 
 function mergeSort(array) {
   if (array.length < 1) {
@@ -62,3 +62,11 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
+
+function randomArray() {
+  let array = [];
+  for (let i = 0; i < 100; i++) {
+    array.push(Math.floor(Math.random() * 101));
+  }
+  return array;
+}
